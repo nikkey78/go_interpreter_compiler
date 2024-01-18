@@ -158,7 +158,7 @@ func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	return stmt
 }
 
-// PARSE EXPRESSION --------------------------------------
+// --------------------------- PARSE EXPRESSION ------------------------------
 func (p *Parser) parseExpression(precedence int) ast.Expression {
 	prefix := p.prefixParseFns[p.curToken.Type]
 	if prefix == nil {
@@ -203,7 +203,7 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 		Operator: p.curToken.Literal,
 	}
 	p.nextToken()
-
+	
 	expression.Right = p.parseExpression(PREFIX)
 	return expression
 }
