@@ -11,6 +11,7 @@ import (
 func main() {
 
 	defer console.GreenReset()()
+	go console.StopApp()
 
 	user, err := user.Current()
 	if err != nil {
