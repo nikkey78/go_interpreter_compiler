@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"monkey2/evaluator"
 	"monkey2/lexer"
 	"monkey2/parser"
 )
@@ -29,7 +30,6 @@ func Start(in io.Reader, out io.Writer) {
 
 		l := lexer.New(line)
 		p := parser.New(l)
-
 		program := p.ParseProgram()
 
 		if len(p.Errors()) != 0 {
@@ -37,8 +37,11 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		io.WriteString(out, program.String())
-		io.WriteString(out, "\n")
+		evaluated := evaluator.Eval(program)
+		if evaluated != nil {
+			io.WriteString(out, program.String())
+			io.WriteString(out, "\n")
+		}
 	}
 }
 
