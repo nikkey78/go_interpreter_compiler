@@ -26,12 +26,6 @@ func Start(in io.Reader, out io.Writer) {
 		}
 
 		line := scanner.Text()
-
-		// last := line[len(line)-1]
-		// if last != ';' {
-		// 	line += ";"
-		// }
-
 		l := lexer.New(line)
 		p := parser.New(l)
 		program := p.ParseProgram()
