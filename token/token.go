@@ -50,6 +50,7 @@ const (
 	IF       = "IF"
 	ELSE     = "ELSE"
 	RETURN   = "RETURN"
+	COLON    = ":"
 )
 
 var keywords = map[string]TokenType{
