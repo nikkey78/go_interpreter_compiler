@@ -88,7 +88,15 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	case *ast.StringLiteral:
 		return &object.String{Value: node.Value}
+
+	case *ast.ArrayLiteral:
+		elements := evalExpressions(node.Elements, env)
+		if len(elements) == 1 && isError(elements[0]) {
+			return elements[0]
+		}
+		return &object.Array{Elements: elements}
 	}
+
 	return nil
 }
 
@@ -336,5 +344,3 @@ func evalStringInfixExpression(operator string, left, right object.Object) objec
 	rightVal := right.(*object.String).Value
 	return &object.String{Value: leftVal + rightVal}
 }
-
-
