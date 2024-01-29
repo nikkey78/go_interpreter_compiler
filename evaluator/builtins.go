@@ -1,6 +1,9 @@
 package evaluator
 
-import "monkey2/object"
+import (
+	"fmt"
+	"monkey2/object"
+)
 
 var builtins = map[string]*object.Builtin{
 	"len": {
@@ -82,7 +85,7 @@ var builtins = map[string]*object.Builtin{
 				return newError("wrong number of arguments. got=%d, want=2",
 					len(args))
 			}
-			
+
 			if args[0].Type() != object.ARRAY_OBJ {
 				return newError("argument to `push` must be ARRAY, got %s",
 					args[0].Type())
@@ -94,6 +97,14 @@ var builtins = map[string]*object.Builtin{
 			copy(newElements, arr.Elements)
 			newElements[length] = args[1]
 			return &object.Array{Elements: newElements}
+		},
+	},
+	"puts": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			for _, arg := range args {
+				fmt.Println(arg.Inspect())
+			}
+			return NULL
 		},
 	},
 }
