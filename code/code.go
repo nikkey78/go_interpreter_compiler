@@ -21,7 +21,7 @@ func (ins Instructions) String() string {
 
 		operands, read := ReadOperands(def, ins[i+1:])
 
-		fmt.Fprintf(&out, "%04d %s \n", i, ins.fmtInstruction(def, operands))
+		fmt.Fprintf(&out, "%04d %s\n", i, ins.fmtInstruction(def, operands))
 
 		i += 1 + read
 	}

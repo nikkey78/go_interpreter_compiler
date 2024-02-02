@@ -44,6 +44,9 @@ func runCompilerTests(t *testing.T, tests []compilerTestCase) {
 
 		bytecode := compiler.Bytecode()
 
+		// t.Log("program:", program)
+		// t.Log("bytecode:", bytecode)
+
 		err = testInstructions(tt.expectedInstructions, bytecode.Instructions)
 		if err != nil {
 			t.Fatalf("testInstructions failed: %s", err)
@@ -71,7 +74,7 @@ func testInstructions(expected []code.Instructions, actual code.Instructions) er
 
 	for i, ins := range concatted {
 		if actual[i] != ins {
-			return fmt.Errorf("wrong instruction at %d. want=%q got=%q", i, concatted, actual)
+			return fmt.Errorf("wrong instruction at %d. \nwant=%q got=%q", i, concatted, actual)
 		}
 	}
 	return nil
@@ -114,4 +117,3 @@ func testIntegerObject(expected int64, actual object.Object) error {
 	}
 	return nil
 }
-
