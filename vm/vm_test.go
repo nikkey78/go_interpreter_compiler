@@ -35,6 +35,9 @@ func runVmTests(t *testing.T, tests []vmTestCase) {
 
 		stackElem := vm.StackTop()
 
+		// t.Logf("%q", comp.Bytecode())
+		t.Logf("%q", stackElem)
+
 		testExpectedObject(t, tt.expected, stackElem)
 	}
 }
@@ -72,7 +75,7 @@ func TestIntegerArithmetic(t *testing.T) {
 	tests := []vmTestCase{
 		{"1", 1},
 		{"2", 2},
-		{"1 + 2", 2}, // FIXME
+		{"1 + 5", 6}, // FIXME  number 5 on top of stack
 	}
 	runVmTests(t, tests)
 }
