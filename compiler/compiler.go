@@ -121,8 +121,28 @@ func (c *Compiler) Compile(node ast.Node) error {
 			c.removeLastPop()
 		}
 
-		afterConsequencePos := len(c.instructions)
-		c.changeOperand(jumpNotTrythyPos, afterConsequencePos)
+		if node.Alternative == nil {
+			afterConsequencePos := len(c.instructions)
+			c.changeOperand(jumpNotTrythyPos, afterConsequencePos)
+		} else {
+			// Emit an `OpJump` with a bogus value
+			jumpPos := c.emit(code.OpJump, 9999)
+
+			afterConsequencePos := len(c.instructions)
+			c.changeOperand(jumpNotTrythyPos, afterConsequencePos)
+
+			err := c.Compile(node.Alternative)
+			if err != nil {
+				return err
+			}
+
+			if c.lastInstructionIsPop() {
+				c.removeLastPop()
+			}
+
+			afterAlternativePos := len(c.instructions)
+			c.changeOperand(jumpPos, afterAlternativePos)
+		}
 
 	case *ast.BlockStatement:
 		for _, s := range node.Statements {
@@ -186,6 +206,7 @@ func (c *Compiler) Bytecode() *Bytecode {
 	}
 }
 
+// check if the last instructions is OpPop
 func (c *Compiler) lastInstructionIsPop() bool {
 	return c.lastInstruction.Opcode == code.OpPop
 }
