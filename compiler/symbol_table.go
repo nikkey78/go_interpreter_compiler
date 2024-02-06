@@ -33,3 +33,4 @@ func (s *SymbolTable) Resole(name string) (Symbol, bool) {
 	obj, ok := s.store[name]
 	return obj, ok
 }
+
