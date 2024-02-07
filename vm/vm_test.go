@@ -23,6 +23,7 @@ func runVmTests(t *testing.T, tests []vmTestCase) {
 
 		comp := compiler.New()
 		err := comp.Compile(program)
+
 		if err != nil {
 			t.Fatalf("compiler error: %s", err)
 		}
@@ -168,5 +169,15 @@ func TestConditionals(t *testing.T) {
 
 		{"if ((if (false) { 10 })) { 10 } else { 20 }", 20},
 	}
+	runVmTests(t, tests)
+}
+
+func TestGlobalLetStatement(t *testing.T) {
+	tests := []vmTestCase{
+		{"let one = 1; one", 1},
+		{"let one = 1; let two = 2; one + two", 3},
+		{"let one = 1; let two = one + one; one + two", 3},
+	}
+
 	runVmTests(t, tests)
 }
