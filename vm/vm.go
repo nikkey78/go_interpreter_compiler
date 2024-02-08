@@ -379,3 +379,4 @@ func (vm *VM) executeHashIndex(hash, index object.Object) error {
 
 	return vm.push(pair.Value)
 }
+
