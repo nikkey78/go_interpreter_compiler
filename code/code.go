@@ -32,7 +32,7 @@ const (
 	OpIndex
 	OpCall
 	OpReturnValue
-	OpReturn
+	OpReturn // return NULL
 )
 
 type Definition struct {
