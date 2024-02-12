@@ -96,6 +96,7 @@ func runCompilerTests(t *testing.T, tests []compilerTestCase) {
 		bytecode := compiler.Bytecode()
 
 		// t.Log("program:", program)
+		// t.Logf("instruct: %q\r\n", bytecode.Instructions)
 		// t.Log("instruct:\r\n", bytecode.Instructions.String())
 		// t.Log("constant 1:", bytecode.Constants[0])
 		// t.Log("constant 2:", bytecode.Constants[1])
@@ -725,4 +726,3 @@ func TestFunctionCalls(t *testing.T) {
 	}
 	runCompilerTests(t, tests)
 }
-
