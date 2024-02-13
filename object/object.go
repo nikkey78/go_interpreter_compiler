@@ -90,6 +90,7 @@ func (f *Function) Inspect() string {
 type CompiledFunction struct {
 	Instructions code.Instructions
 	NumLocals int
+	NumParameters int
 }
 
 func (cf *CompiledFunction) Type() ObjectType { return COMPILED_FUNCTION_OBJ }
