@@ -169,10 +169,10 @@ func (c *Compiler) Compile(node ast.Node) error {
 			return err
 		}
 		symbol := c.symbolTable.Define(node.Name.Value)
-		
-		if symbol.Scope == GlobalScope{
+
+		if symbol.Scope == GlobalScope {
 			c.emit(code.OpSetGlobal, symbol.Index)
-		} else{
+		} else {
 			c.emit(code.OpSetLocal, symbol.Index)
 		}
 
@@ -182,7 +182,7 @@ func (c *Compiler) Compile(node ast.Node) error {
 			return fmt.Errorf("undefined variable %s", node.Value)
 		}
 
-		if symbol.Scope == GlobalScope{
+		if symbol.Scope == GlobalScope {
 			c.emit(code.OpGetGlobal, symbol.Index)
 		} else {
 			c.emit(code.OpGetLocal, symbol.Index)
@@ -260,9 +260,14 @@ func (c *Compiler) Compile(node ast.Node) error {
 			c.emit(code.OpReturn)
 		}
 
+		numLocals := c.symbolTable.numDefinitions
 		instructions := c.leaveScope()
 
-		compiledFn := &object.CompiledFunction{Instructions: instructions}
+		compiledFn := &object.CompiledFunction{
+			Instructions: instructions,
+			NumLocals:    numLocals,
+		}
+
 		c.emit(code.OpConstant, c.addConstant(compiledFn))
 
 	case *ast.ReturnStatement:
