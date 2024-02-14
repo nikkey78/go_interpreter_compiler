@@ -22,6 +22,10 @@ func Start(in io.Reader, out io.Writer) {
 	globals := make([]object.Object, vm.GlobalsSize)
 	symoblTable := compiler.NewSymbolTable()
 
+	for i, v := range object.Builtins {
+		symoblTable.DefineBuiltin(i, v.Name)
+	}
+
 	for {
 		fmt.Print(PROMPT)
 

@@ -190,12 +190,6 @@ func (c *Compiler) Compile(node ast.Node) error {
 
 		c.loadSymbol(symbol)
 
-		// if symbol.Scope == GlobalScope {
-		// 	c.emit(code.OpGetGlobal, symbol.Index)
-		// } else {
-		// 	c.emit(code.OpGetLocal, symbol.Index)
-		// }
-
 	case *ast.Boolean:
 		if node.Value {
 			c.emit(code.OpTrue)
