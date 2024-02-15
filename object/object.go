@@ -23,6 +23,7 @@ const (
 	ARRAY_OBJ             = "ARRAY"
 	HASH_OBJ              = "HASH"
 	COMPILED_FUNCTION_OBJ = "COMPILED_FUNCTION_OBJ"
+	CLOSURE_OBJ           = "CLOSURE"
 )
 
 type Object interface {
@@ -88,8 +89,8 @@ func (f *Function) Inspect() string {
 }
 
 type CompiledFunction struct {
-	Instructions code.Instructions
-	NumLocals int
+	Instructions  code.Instructions
+	NumLocals     int
 	NumParameters int
 }
 
@@ -177,3 +178,11 @@ func (h *Hash) Inspect() string {
 type Hashable interface {
 	HashKey() HashKey
 }
+
+type Closure struct {
+	Fn   *CompiledFunction
+	Free []Object
+}
+
+func (c *Closure) Type() ObjectType { return CLOSURE_OBJ }
+func (c *Closure) Inspect() string  { return fmt.Sprintf("Closure[%p]", c) }
