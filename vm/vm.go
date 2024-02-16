@@ -556,3 +556,5 @@ func (vm *VM) pushClosure(constIndex, numFree int) error {
 	closure := &object.Closure{Fn: function, Free: free}
 	return vm.push(closure)
 }
+
+
