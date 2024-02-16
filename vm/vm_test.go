@@ -28,6 +28,17 @@ func runVmTests(t *testing.T, tests []vmTestCase) {
 			t.Fatalf("compiler error: %s", err)
 		}
 
+		for i, constant := range comp.Bytecode().Constants {
+			fmt.Printf("CONSTANT %d %p (%T):\n", i, constant, constant)
+			switch constant := constant.(type) {
+			case *object.CompiledFunction:
+				fmt.Printf(" Instructions:\n%s", constant.Instructions)
+			case *object.Integer:
+				fmt.Printf(" Value: %d\n", constant.Value)
+			}
+			fmt.Printf("\n")
+		}
+
 		vm := New(comp.Bytecode())
 		err = vm.Run()
 		if err != nil {
@@ -648,8 +659,8 @@ func TestClosures(t *testing.T) {
 			adder(8);
 			`,
 			expected: 14,
-			},
-			{
+		},
+		{
 			input: `
 			let a = 1;
 			let newAdderOuter = fn(b) {
@@ -662,8 +673,8 @@ func TestClosures(t *testing.T) {
 			adder(8);
 			`,
 			expected: 14,
-			},
-			{
+		},
+		{
 			input: `
 			let newClosure = fn(a, b) {
 			let one = fn() { a; };
@@ -674,7 +685,59 @@ func TestClosures(t *testing.T) {
 			closure();
 			`,
 			expected: 99,
-			},
+		},
+	}
+	runVmTests(t, tests)
+}
+
+func TestRecursiveFunctions(t *testing.T) {
+	tests := []vmTestCase{
+		{
+			input: `
+	let countDown = fn(x) {
+	if (x == 0) {
+	return 0;
+	} else {
+	countDown(x - 1);
+	}
+	};
+	countDown(1);
+	`,
+			expected: 0,
+		},
+
+		{
+			input: `
+			let countDown = fn(x) {
+			if (x == 0) {
+			return 0;
+			} else {
+			countDown(x - 1);
+			}
+			};
+			let wrapper = fn() {
+			countDown(1);
+			};
+			wrapper();
+			`,
+			expected: 0,
+		},
+		{
+			input: `
+			let wrapper = fn() {
+			let countDown = fn(x) {
+			if (x == 0) {
+			return 0;
+			} else {
+			countDown(x - 1);
+			}
+			};
+			countDown(1);
+			};
+			wrapper();
+			`,
+			expected: 0,
+		},
 	}
 	runVmTests(t, tests)
 }

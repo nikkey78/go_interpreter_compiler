@@ -104,7 +104,7 @@ func (p *Parser) ParseProgram() *ast.Programm {
 	for !p.curTokenIs(token.EOF) {
 		stmt := p.parseStatement()
 		// if stmt != nil {
-			program.Statements = append(program.Statements, stmt)
+		program.Statements = append(program.Statements, stmt)
 		// }
 		p.nextToken()
 	}
@@ -138,6 +138,10 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 
 	p.nextToken()
 	stmt.Value = p.parseExpression(LOWEST)
+
+	if fl, ok := stmt.Value.(*ast.FunctionLiteral); ok {
+		fl.Name = stmt.Name.Value
+	}
 
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
